@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1A0B2E">
+  <meta name="description" content="TechWave is a podcast covering technology, productivity, and personal growth.">
+  <title>TechWave - Podcast</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        screens: { md: "576px", lg: "992px" },
+        extend: {
+          colors: { brand: "#1A0B2E", panel: "#2A1648", neon: "#00FF88" },
+          fontFamily: { sans: ["Inter", "sans-serif"] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --brand: #1A0B2E;
+      --panel: #2A1648;
+      --neon: #00FF88;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    .container-main { width: 100%; max-width: 75rem; margin-inline: auto; padding-inline: 1rem; }
+    .section-title { text-align: center; font-size: 1.875rem; line-height: 2.25rem; font-weight: 800; }
+    .muted { color: #D1D5DB; }
+    .panel { background: rgba(42, 22, 72, .92); border: 1px solid rgba(255, 255, 255, .08); border-radius: 1.25rem; }
+
+    .hero {
+      background: url("assets/hero-bg.png") center / cover no-repeat;
+      text-align: center;
+    }
+    .podcast-art {
+      position: relative;
+      width: 15rem;
+      height: 15rem;
+      margin: 0 auto 2.25rem;
+    }
+    .podcast-art::before {
+      content: "";
+      position: absolute;
+      inset: -1.25rem;
+      border-radius: 9999px;
+      background: rgba(236, 72, 153, .38);
+      filter: blur(1.5rem);
+      animation: glow 2s ease-in-out infinite;
+    }
+    .podcast-ring {
+      position: absolute;
+      inset: -0.75rem;
+      border: 2px dashed rgba(0, 255, 136, .65);
+      border-radius: 9999px;
+      animation: spin 20s linear infinite;
+    }
+    .podcast-art img.circle { position: relative; width: 100%; height: 100%; }
+    .podcast-art img.microphone {
+      position: absolute;
+      width: 5.25rem;
+      height: 8.25rem;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      object-fit: contain;
+    }
+    .new-badge {
+      position: absolute;
+      z-index: 2;
+      top: .35rem;
+      right: -.15rem;
+      border-radius: 9999px;
+      background: var(--neon);
+      color: var(--brand);
+      padding: .45rem .8rem;
+      font-size: .75rem;
+      font-weight: 800;
+      box-shadow: 0 8px 20px rgba(0, 255, 136, .25);
+    }
+
+    .gradient-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .625rem;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #7C3AED, #EC4899, #FACC15);
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    .gradient-button:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(236, 72, 153, .32); }
+    .outline-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .625rem;
+      border: 1px solid var(--neon);
+      border-radius: 9999px;
+      color: var(--neon);
+      font-weight: 700;
+      transition: 180ms ease;
+    }
+    .outline-button:hover { background: var(--neon); color: var(--brand); }
+
+    .feature-card {
+      padding: 1.5rem;
+      transition: transform 180ms ease, border-color 180ms ease;
+    }
+    .feature-card:hover { transform: translateY(-4px); border-color: rgba(236, 72, 153, .7); }
+    .feature-card img, .feature-card svg { height: 3rem; width: 3rem; }
+
+    .episode-visual {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .episode-visual.one { background: linear-gradient(135deg, #5B21B6, #EC4899 60%, #FACC15); }
+    .episode-visual.two { background: linear-gradient(135deg, #164E63, #7C3AED 55%, #EC4899); }
+    .episode-visual.three { background: linear-gradient(135deg, #064E3B, #0F766E 45%, #FACC15); }
+    .episode-visual::after {
+      content: "";
+      width: 5rem;
+      height: 5rem;
+      border: 1px solid rgba(255, 255, 255, .24);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .08);
+      backdrop-filter: blur(8px);
+    }
+    .episode-play {
+      position: absolute;
+      z-index: 2;
+      width: 3.25rem;
+      height: 3.25rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--neon);
+      color: var(--brand);
+      transition: transform 180ms ease;
+    }
+    .episode-card:hover .episode-play { transform: scale(1.1); }
+    .episode-card { overflow: hidden; transition: transform 180ms ease; }
+    .episode-card:hover { transform: translateY(-5px); }
+
+    .social-link {
+      display: grid;
+      width: 2.5rem;
+      height: 2.5rem;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .25);
+      border-radius: 50%;
+      transition: 180ms ease;
+    }
+    .social-link:hover { border-color: var(--neon); transform: translateY(-2px); }
+    .social-link img { width: 1.125rem; height: 1.125rem; object-fit: contain; }
+
+    .footer {
+      background: url("assets/footer-bg.png") center / cover no-repeat;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes glow {
+      50% { transform: scale(1.08); opacity: .72; }
+    }
+
+    @media (min-width: 576px) {
+      .podcast-art { width: 19.5rem; height: 19.5rem; }
+      .podcast-art img.microphone { width: 7.25rem; height: 10.75rem; }
+      .section-title { font-size: 2.25rem; line-height: 2.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .podcast-ring, .podcast-art::before { animation: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-brand text-white font-sans">
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-brand/95 backdrop-blur">
+    <div class="container-main flex items-center justify-between py-4">
+      <a href="#home" aria-label="TechWave home">
+        <img src="assets/TechWave.svg" alt="TechWave" class="h-8">
+      </a>
+
+      <input type="checkbox" id="menu-toggle" class="peer hidden" aria-label="Toggle navigation">
+      <nav class="hidden peer-checked:flex absolute left-0 top-full w-full flex-col items-center gap-5 border-b border-white/10 bg-brand py-6 lg:flex lg:static lg:w-auto lg:flex-row lg:gap-8 lg:border-0 lg:bg-transparent lg:py-0">
+        <a href="#about" class="font-medium hover:text-neon transition">About</a>
+        <a href="#episodes" class="font-medium hover:text-neon transition">Episodes</a>
+        <a href="#host" class="font-medium hover:text-neon transition">Host</a>
+        <a href="#footer" class="gradient-button px-6 py-2 lg:hidden">Subscribe</a>
+      </nav>
+
+      <a href="#footer" class="gradient-button hidden px-6 py-2 lg:inline-flex">Subscribe</a>
+      <label for="menu-toggle" class="cursor-pointer p-2 lg:hidden" aria-label="Open menu">
+        <img src="assets/hamburger-menu.png" alt="" class="h-6 w-6">
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="mx-auto max-w-3xl px-4 py-16 md:py-20 lg:py-24">
+        <div class="podcast-art" aria-label="TechWave podcast logo">
+          <div class="podcast-ring"></div>
+          <img class="circle" src="assets/hero-circle.png" alt="">
+          <img class="microphone" src="assets/microphone.png" alt="">
+          <span class="new-badge">New</span>
+        </div>
+        <h1 class="text-5xl font-black tracking-tight lg:text-7xl">TechWave</h1>
+        <p class="muted mx-auto mt-4 max-w-2xl text-base md:text-lg">
+          Your daily dose of tech insights, productivity hacks, and personal growth
+        </p>
+        <div class="mt-8 flex flex-col justify-center gap-4 md:flex-row">
+          <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer" class="gradient-button px-8 py-3">
+            <img src="assets/spotify.png" alt="" class="h-5 w-5"> Listen on Spotify
+          </a>
+          <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="outline-button px-8 py-3">
+            <img src="assets/message.png" alt="" class="h-5 w-5"> Subscribe
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="container-main py-16 text-center">
+      <h2 class="section-title">About the Podcast</h2>
+      <p class="muted mx-auto mt-5 max-w-3xl leading-relaxed">
+        TechWave is your go-to podcast for staying ahead in the fast-paced world of technology.
+        We break down complex topics into digestible insights, explore productivity strategies that
+        actually work, and share stories of personal growth from industry leaders.
+      </p>
+      <div class="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div class="panel py-8">
+          <p class="text-neon text-3xl font-black lg:text-4xl">150K+</p>
+          <p class="muted mt-1">Monthly Listeners</p>
+        </div>
+        <div class="panel py-8">
+          <p class="text-neon text-3xl font-black lg:text-4xl">200+</p>
+          <p class="muted mt-1">Episodes Published</p>
+        </div>
+        <div class="panel py-8">
+          <p class="text-neon text-3xl font-black lg:text-4xl">4.9&#9733;</p>
+          <p class="muted mt-1">Average Rating</p>
+        </div>
+        <div class="panel py-8">
+          <p class="text-neon text-3xl font-black lg:text-4xl">50+</p>
+          <p class="muted mt-1">Industry Experts</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="why" class="border-y border-white/5 bg-panel/40 py-16">
+      <div class="container-main">
+        <h2 class="section-title">Why Choose TechWave</h2>
+        <div class="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-6">
+          <article class="panel feature-card lg:col-span-4">
+            <img src="assets/headphone.png" alt="">
+            <h3 class="mt-4 text-xl font-bold">Premium Audio Quality</h3>
+            <p class="muted mt-2">Experience crystal-clear sound with professional-grade recording equipment and expert audio engineering.</p>
+          </article>
+          <article class="panel feature-card lg:col-span-2">
+            <img src="assets/device.png" alt="">
+            <h3 class="mt-4 text-xl font-bold">Mobile Friendly</h3>
+            <p class="muted mt-2">Listen on the go with a seamless mobile experience and offline downloads.</p>
+          </article>
+          <article class="panel feature-card lg:col-span-2">
+            <img src="assets/resource.png" alt="">
+            <h3 class="mt-4 text-xl font-bold">Global Community</h3>
+            <p class="muted mt-2">Connect with tech enthusiasts from over 120 countries worldwide.</p>
+          </article>
+          <article class="panel feature-card lg:col-span-4">
+            <img src="assets/location.png" alt="">
+            <h3 class="mt-4 text-xl font-bold">Exclusive Interviews</h3>
+            <p class="muted mt-2">Get unprecedented access to industry leaders, startup founders, and tech visionaries.</p>
+          </article>
+          <article class="panel feature-card lg:col-span-6">
+            <img src="assets/resource.png" alt="">
+            <h3 class="mt-4 text-xl font-bold">Rich Learning Resources</h3>
+            <p class="muted mt-2">Access show notes, transcripts, and additional learning materials for every episode.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="episodes" class="container-main py-16">
+      <h2 class="section-title">Featured Episodes</h2>
+      <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <article class="panel episode-card">
+          <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="Watch The Future of AI" class="episode-visual one">
+            <span class="episode-play" aria-hidden="true">&#9654;</span>
+          </a>
+          <div class="p-5">
+            <h3 class="text-xl font-bold">The Future of AI in Everyday Life</h3>
+            <p class="muted mt-2 text-sm">How artificial intelligence is transforming daily routines and what to expect next.</p>
+            <p class="mt-4 flex items-center gap-2 text-sm text-neon"><img src="assets/clock.png" alt="" class="h-4 w-4">42 min</p>
+          </div>
+        </article>
+        <article class="panel episode-card">
+          <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="Watch Building Better Habits" class="episode-visual two">
+            <span class="episode-play" aria-hidden="true">&#9654;</span>
+          </a>
+          <div class="p-5">
+            <h3 class="text-xl font-bold">Building Better Habits for Remote Work</h3>
+            <p class="muted mt-2 text-sm">Practical strategies for staying productive while maintaining a healthy work-life balance.</p>
+            <p class="mt-4 flex items-center gap-2 text-sm text-neon"><img src="assets/clock.png" alt="" class="h-4 w-4">35 min</p>
+          </div>
+        </article>
+        <article class="panel episode-card">
+          <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="Watch Career Growth in Tech" class="episode-visual three">
+            <span class="episode-play" aria-hidden="true">&#9654;</span>
+          </a>
+          <div class="p-5">
+            <h3 class="text-xl font-bold">Career Growth in Tech: A Roadmap</h3>
+            <p class="muted mt-2 text-sm">Expert advice for navigating your tech career from junior roles to leadership.</p>
+            <p class="mt-4 flex items-center gap-2 text-sm text-neon"><img src="assets/clock.png" alt="" class="h-4 w-4">51 min</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="host" class="bg-panel/40 py-16">
+      <div class="container-main max-w-5xl">
+        <h2 class="section-title">Meet the Host</h2>
+        <div class="mt-10 flex flex-col items-center gap-8 lg:flex-row lg:gap-12">
+          <img src="assets/host.png" alt="Alex Kumar" class="h-52 w-52 rounded-full object-cover ring-4 ring-pink-500/60 lg:h-56 lg:w-56">
+          <div class="text-center lg:text-left">
+            <h3 class="text-2xl font-bold">Alex Kumar</h3>
+            <p class="muted mt-3 leading-relaxed">
+              Tech entrepreneur, productivity expert, and lifelong learner. Alex has spent over 10 years
+              working with startups and global technology companies. Through TechWave, he shares practical
+              advice and insights from the people shaping the future of technology.
+            </p>
+            <div class="mt-5 flex justify-center gap-3 lg:justify-start">
+              <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn"><img src="assets/linkedin.png" alt=""></a>
+              <a href="https://x.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X"><img src="assets/x.png" alt=""></a>
+              <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram"><img src="assets/instagram.png" alt=""></a>
+              <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube"><img src="assets/youtube.png" alt=""></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer" class="footer">
+    <div class="mx-auto max-w-4xl px-4 py-14 text-center">
+      <img src="assets/TechWave.svg" alt="TechWave" class="mx-auto h-10">
+      <p class="muted mt-3">Your daily dose of tech insights, productivity hacks, and personal growth</p>
+      <div class="mt-8 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+        <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 rounded-full border border-white/20 py-3 transition hover:border-neon hover:text-neon"><img src="assets/spotify.png" alt="" class="h-5">Spotify</a>
+        <a href="https://podcasts.apple.com/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 rounded-full border border-white/20 py-3 transition hover:border-neon hover:text-neon"><img src="assets/apple-podcast.png" alt="" class="h-5">Apple Podcasts</a>
+        <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 rounded-full border border-white/20 py-3 transition hover:border-neon hover:text-neon"><img src="assets/youtube-podcast.png" alt="" class="h-5">YouTube</a>
+        <a href="https://x.com/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 rounded-full border border-white/20 py-3 transition hover:border-neon hover:text-neon"><img src="assets/twitter.png" alt="" class="h-5">Twitter</a>
+      </div>
+      <p class="muted mt-8 flex items-center justify-center gap-2"><img src="assets/message.png" alt="" class="h-4">hello@techwave.com</p>
+      <p class="mt-8 border-t border-white/10 pt-6 text-sm text-gray-400">&copy; 2026 TechWave Podcast. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
